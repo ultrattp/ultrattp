@@ -1,0 +1,6 @@
+======# Basic header test, request
+GET /test.ext?a=b+c HTTP/1.2\r\n
+User-Agent: FooAgent\r\n
+Name: Basic header test, request\r\n
+Host: trolohost\r\n\r\n
+======

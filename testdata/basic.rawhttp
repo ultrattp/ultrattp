@@ -1,0 +1,88 @@
+======# weird response with tabs etc.
+HTTP/1.1 200 OK\r\n
+Date: Mon, 23 May 2005 22:38:34 GMT\r\n
+Server: Apache/1.3.3.7 \n (Unix) (Red-Hat/Linux)\r\n
+Last-Modified: Wed, 08 Jan 2003 23:11:55 GMT\r\n
+ETag: "3f80f-1b6-3e1cb03b"\r\n
+Content-Type: text/html; \n\t\t  charset=UTF-8\r\n
+Content-Length: 130\r\n
+Accept-Ranges: bytes\r\n
+Connection: close\r\n\r\n
+======
+
+======# super simple request
+POST /test.ext?a=b+c HTTP/1.1\r\n
+User-Agent: FooAgent\r\n
+Host: trolohost\r\n\r\n
+======
+
+======# super simple request with weird http version
+POST /test.ext?a=b+c HTTP/1.2\r\n
+User-Agent: FooAgent\r\n
+Host: trolohost\r\n\r\n
+======
+
+======# realworld request. this is modified github request with replaced ID/sessions/etc.
+GET /abc.dep HTTP/1.1\r\n
+Host: example.com\r\n
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:57.0) Gecko/20100101 Firefox/57.0\r\n
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n
+Accept-Language: en-US,en;q=0.5\r\n
+Accept-Encoding: gzip, deflate, br\r\n
+Cookie: logged_in=yes; _ga=GA1.2.1445642807.1647766280; _octo=GH1.1.1675285005.1475954926; user_session=Uw8ttmd6WvvUyf4W5D7RFJ9RGHy9e6ubkyeEeCmCvJMDW7aD; __Host-user_session_same_site=RQJrXUN7rEbJ8fyaYF544MQV8d7DCs3XtBK3AkaUp2MXJxmwXaces3JSVGErARcfmEELtBBBJzc6VXuUdd84UUMat2GyjVBjjeXSNdEzPzEFgSHk59vPTHW6e2YHk3DCpZdbGWdVRN2qF7SW7FQm2wSMJY9DgaPfFp5c5tq9hdYYTpkqGdfAehCGYfgkgVdZ6gKCFGXd4UXzrVTMxWpdWyea8EFB7mNpQUaFJ4LgdbCqwSFvuGnEUZJqjKDc--C4wY8qwF4yzWG5SKaXpFj7scCzpCqCanRFP6B42R; tz=Europe%2FMinsk; _gat=1\r\n
+Connection: keep-alive\r\n
+Upgrade-Insecure-Requests: 1\r\n\r\n
+======
+
+======# realworld request
+GET /get?show_env=1 HTTP/1.1\r\n
+Host: httpbin.org\r\n
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:57.0) Gecko/20100101 Firefox/57.0\r\n
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n
+Accept-Language: en-US,en;q=0.5\r\n
+Accept-Encoding: gzip, deflate, br\r\n
+Cookie: _gauges_unique_day=1; _gauges_unique_month=1; _gauges_unique_year=1; _gauges_unique=1\r\n
+Connection: keep-alive\r\n
+Upgrade-Insecure-Requests: 1\r\n
+Cache-Control: max-age=0\r\n\r\n
+======
+
+======# realworld response
+Connection: keep-alive\r\n
+Server: meinheld/0.6.1\r\n
+Date: Sat, 04 Nov 2017 00:29:30 GMT\r\n
+Content-Type: application/json\r\n
+Access-Control-Allow-Origin: *\r\n
+Access-Control-Allow-Credentials: true\r\n
+X-Powered-By: Flask\r\n
+X-Processed-Time: 0.000750064849854\r\n
+Content-Length: 922\r\n
+Via: 1.1 vegur\r\n\n
+\r\n
+{\n
+  "args": {\n
+    "show_env": "1"\n
+  }, \n
+  "headers": {
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", \n
+    "Accept-Encoding": "gzip, deflate, br", \n
+    "Accept-Language": "en-US,en;q=0.5", \n
+    "Cache-Control": "max-age=0", \n
+    "Connect-Time": "0", \n
+    "Connection": "close", \n
+    "Cookie": "_gauges_unique_day=1; _gauges_unique_month=1; _gauges_unique_year=1; _gauges_unique=1", \n
+    "Host": "httpbin.org", \n
+    "Total-Route-Time": "0", \n
+    "Upgrade-Insecure-Requests": "1", \n
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:57.0) Gecko/20100101 Firefox/57.0", \n
+    "Via": "1.1 vegur", \n
+    "X-Forwarded-For": "13.37.13.37", \n
+    "X-Forwarded-Port": "443", \n
+    "X-Forwarded-Proto": "https", \n
+    "X-Request-Id": "cb14786c-ec17-420f-949f-1feaef39c2a5", \n
+    "X-Request-Start": "1509755370811"\n
+  }, \n
+  "origin": "13.37.13.37", \n
+  "url": "https://httpbin.org/get?show_env=1"\n
+}\r\n\r\n
+======
