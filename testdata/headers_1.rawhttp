@@ -4,3 +4,15 @@ User-Agent: FooAgent\r\n
 Name: Basic header test, request\r\n
 Host: trolohost\r\n\r\n
 ======
+======# weird response with tabs etc.
+HTTP/1.1 200 OK\r\n
+Date: Mon, 23 May 2005 22:38:34 GMT\r\n
+Name: weird response with tabs etc.\r\n
+Server: Apache/1.3.3.7 \n (Unix) (Red-Hat/Linux)\r\n
+Last-Modified: Wed, 08 Jan 2003 23:11:55 GMT\r\n
+ETag: "3f80f-1b6-3e1cb03b"\r\n
+Content-Type: text/html; \n\t\t  charset=UTF-8\r\n
+Content-Length: 130\r\n
+Accept-Ranges: bytes\r\n
+Connection: close\r\n\r\n
+======
