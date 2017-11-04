@@ -6,8 +6,6 @@ import (
 	"strings"
 )
 
-var lineSplitter = []byte("\r\n")
-
 // ParseHeader reads all headers until header with given name
 // in case-insensetive way
 func (r *Result) ParseHeader(name string) ([]byte, bool) {

@@ -2,8 +2,6 @@ package parser
 
 import "bytes"
 
-var strHTTP = []byte("HTTP")
-
 // Type returns http type: request, response or unknown if state is invalid
 func (r *Result) Type() HTTPType {
 	if r.httpType == "" {
