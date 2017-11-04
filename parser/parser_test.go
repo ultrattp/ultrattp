@@ -57,19 +57,21 @@ func TestHeaders(t *testing.T) {
 			)
 		}
 		value, wasFound = parsed.ParseHeader("Host")
-		if !wasFound {
-			t.Fatalf(
-				"Host header required but was not found in case #%d",
-				id,
-			)
-		}
-		if !bytes.Equal(value, []byte("trolohost")) {
-			t.Fatalf(
-				"Host header was found but got %q instead of expected %q in case %d",
-				string(value),
-				_case.Name,
-				id,
-			)
+		if !_case.GuessIsResponse {
+			if !wasFound {
+				t.Fatalf(
+					"Host header required but was not found in case #%d",
+					id,
+				)
+			}
+			if !bytes.Equal(value, []byte("trolohost")) {
+				t.Fatalf(
+					"Host header was found but got %q instead of expected %q in case %d",
+					string(value),
+					_case.Name,
+					id,
+				)
+			}
 		}
 	}
 
