@@ -19,8 +19,11 @@ var globalLog = &log.Logger{
 }
 
 var respNoContent = []byte(
-	"HTTP/1.1 204 No Content\r\n" +
-		"Server: ultrattp/1.0\r\n\r\n",
+	"HTTP/1.1 200 OK\r\n" +
+		"Server: ultrattp/1.0\r\n" +
+		"\r\n" +
+		"Hi\r\n" +
+		"\r\n",
 )
 
 var defaultServer = &Server{}
