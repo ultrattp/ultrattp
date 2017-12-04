@@ -1,13 +1,16 @@
 package server
 
 import (
+	"fmt"
 	"net"
 	"os"
 	"runtime"
+	"time"
 
 	"github.com/apex/log"
 	"github.com/apex/log/handlers/cli"
 	"github.com/google/uuid"
+	"github.com/ultrattp/ultrattp/util"
 )
 
 var LoggingLevel = log.DebugLevel
@@ -18,15 +21,24 @@ var globalLog = &log.Logger{
 	Handler: logHandler,
 }
 
-var respNoContent = []byte(
-	"HTTP/1.1 200 OK\r\n" +
-		"Server: ultrattp/1.0\r\n" +
-		"\r\n" +
-		"Hi\r\n" +
-		"\r\n",
-)
+var respNoContent = "HTTP/1.1 200 OK\r\n" +
+	"Content-Type: text/plain;charset=utf8\r\n" +
+	"Content-Language: en-US\r\n" +
+	"Server: ultrattp/1.0\r\n" +
+	"Date: %s\r\n" +
+	"Content-Length: 3\r\n" +
+	"Connection: closed\r\n" +
+	"Last-Modified: " + time.Unix(0, 0).In(time.UTC).Format(time.RFC1123) + "\r\n" +
+	"\r\n" +
+	"Hi\n" +
+	"\r\n"
 
 var defaultServer = &Server{}
+
+func getRespNoContent() []byte {
+	now := time.Now().In(time.UTC).Format(time.RFC1123)
+	return util.StringToBytes(fmt.Sprintf(respNoContent, now))
+}
 
 func Serve(ln *net.TCPListener) error {
 	for i := 0; i < runtime.NumCPU(); i++ {

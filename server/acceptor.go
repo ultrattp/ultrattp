@@ -63,7 +63,7 @@ func (a *Acceptor) process(conn *net.TCPConn) {
 		a.log.Errorf("error while closing read pipe")
 	}
 	// time.Sleep(10 * time.Millisecond)
-	n, err := conn.Write(respNoContent)
+	n, err := conn.Write(getRespNoContent())
 	a.log.Debugf("written %d bytes", n)
 	if err != nil {
 		a.log.Errorf("error while writing to connection n=[%d]: %s", n, err)
