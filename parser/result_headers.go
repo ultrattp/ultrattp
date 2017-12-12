@@ -49,36 +49,55 @@ func (r *Result) ParseHeader(name string) ([]byte, bool) {
 	return nil, false
 }
 
+func (r *Result) Proto() []byte {
+	if r.isBroken == true {
+		return nil
+	}
+	if len(r.proto) == 0 {
+		r.readFirstLine()
+	}
+	return r.proto
+}
+
 func (r *Result) readFirstLine() {
+	bodyLen := len(r.body)
+	if len(r.body) == 0 {
+		r.isBroken = true
+		return
+	}
 	var i int
 	if strings.Compare(string(r.Type()), string(HTTPTypeRequest)) == 0 {
-		for ; i < len(r.body) && (r.body[i] != ' ' && r.body[i] != '\t'); i++ {
+		for ; i < bodyLen && (r.body[i] != ' ' && r.body[i] != '\t'); i++ {
 		}
 		r.reqMethod = r.body[:i]
-		for ; i < len(r.body) && (r.body[i] == ' ' || r.body[i] == '\t'); i++ {
+		for ; i < bodyLen && (r.body[i] == ' ' || r.body[i] == '\t'); i++ {
 			// skip spaces
 		}
 		var reqPathStartIdx = i
-		for ; i < len(r.body) && (r.body[i] != ' ' && r.body[i] != '\t'); i++ {
+		for ; i < bodyLen && (r.body[i] != ' ' && r.body[i] != '\t'); i++ {
 		}
 		r.reqPath = r.body[reqPathStartIdx:i]
-		for ; i < len(r.body) && (r.body[i] == ' ' || r.body[i] == '\t'); i++ {
+		for ; i < bodyLen && (r.body[i] == ' ' || r.body[i] == '\t'); i++ {
 			// skip spaces
 		}
-
-		r.proto = r.body[i : i+bytes.Index(r.body[i:], lineSplitter)]
-		r.preambulaEnd += len(r.proto)
+		protoEnding := bytes.Index(r.body[i:], lineSplitter)
+		if protoEnding != -1 {
+			r.proto = r.body[i : i+protoEnding]
+			r.preambulaEnd += len(r.proto)
+		} else {
+			r.isBroken = true
+		}
 		// parsed line
 	} else {
-		for ; i < len(r.body) && (r.body[i] != ' ' && r.body[i] != '\t'); i++ {
+		for ; i < bodyLen && (r.body[i] != ' ' && r.body[i] != '\t'); i++ {
 		}
 		r.proto = r.body[:i]
-		for ; i < len(r.body) && (r.body[i] == ' ' || r.body[i] == '\t'); i++ {
+		for ; i < bodyLen && (r.body[i] == ' ' || r.body[i] == '\t'); i++ {
 			// skip spaces
 		}
 
 		var statusCodeStartIdx = i
-		for ; i < len(r.body) && (r.body[i] != ' ' && r.body[i] != '\t'); i++ {
+		for ; i < bodyLen && (r.body[i] != ' ' && r.body[i] != '\t'); i++ {
 		}
 		statusCode, err := strconv.ParseUint(string(r.body[statusCodeStartIdx:i]), 10, 64)
 		if err != nil {

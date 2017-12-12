@@ -11,8 +11,8 @@ type Server = server.Server
 
 type RequestCtx = server.RequestCtx
 
-func Serve(ln *net.TCPListener) error {
-	return server.Serve(ln)
+func Serve(ln *net.TCPListener, h func(*RequestCtx)) error {
+	return server.Serve(ln, h)
 }
 
 func ListenAndServe(addr string, h func(ctx *RequestCtx)) error {

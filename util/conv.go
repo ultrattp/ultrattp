@@ -15,3 +15,8 @@ func StringToBytes(s string) []byte {
 		Cap:   strstruct.Len,
 	}))
 }
+
+// BytesToString effectively converts bytes to string
+func BytesToString(b []byte) string {
+	return *(*string)(unsafe.Pointer(&b))
+}

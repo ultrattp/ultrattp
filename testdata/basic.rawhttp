@@ -86,3 +86,30 @@ Via: 1.1 vegur\r\n\n
   "url": "https://httpbin.org/get?show_env=1"\n
 }\r\n\r\n
 ======
+======# wrk request example
+GET / HTTP/1.1\r\n
+Host: 127.0.0.1:1025\r\n\r\n
+======
+======# 10 pipelined requests
+GET / HTTP/1.1\r\n
+Host: 127.0.0.1:1025\r\n\r\n
+GET / HTTP/1.1\r\n
+Host: 127.0.0.1:1025\r\n\r\n
+GET / HTTP/1.1\r\n
+Host: 127.0.0.1:1025\r\n\r\n
+GET / HTTP/1.1\r\n
+Host: 127.0.0.1:1025\r\n\r\n
+GET / HTTP/1.1\r\n
+Host: 127.0.0.1:1025\r\n\r\n
+GET / HTTP/1.1\r\n
+Host: 127.0.0.1:1025\r\n\r\n
+GET / HTTP/1.1\r\n
+Host: 127.0.0.1:1025\r\n\r\n
+GET / HTTP/1.1\r\n
+Host: 127.0.0.1:1025\r\n\r\n
+GET / HTTP/1.1\r\n
+Host: 127.0.0.1:1025\r\n\r\n
+GET / HTTP/1.1\r\n
+Host: 127.0.0.1:1025\r\n\r\n
+GET / HTTP/1.1\r\n
+Host: 127.0.0.1:1025\r\n\r\n

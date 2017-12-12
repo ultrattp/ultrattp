@@ -19,3 +19,7 @@ func (r *Result) Type() HTTPType {
 
 	return r.httpType
 }
+
+func (r *Result) IsBroken() bool {
+	return r.isBroken
+}
