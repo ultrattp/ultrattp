@@ -9,6 +9,7 @@ import (
 	"github.com/apex/log"
 	"github.com/apex/log/handlers/cli"
 	"github.com/google/uuid"
+	"github.com/valyala/fasthttp/reuseport"
 )
 
 var LoggingLevel = log.DebugLevel
@@ -52,7 +53,8 @@ func Serve(ln *net.TCPListener, h func(*RequestCtx)) error {
 }
 
 func ListenAndServe(addr string, h func(*RequestCtx)) error {
-	ln, err := net.Listen("tcp4", addr)
+	// ln, err := net.Listen("tcp4", addr)
+	ln, err := reuseport.Listen("tcp4", addr)
 	if err != nil {
 		return err
 	}
