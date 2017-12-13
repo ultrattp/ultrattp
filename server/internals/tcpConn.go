@@ -9,6 +9,6 @@ type TCPConn struct {
 
 func (conn *TCPConn) Setup() {
 	// conn.SetLinger(10)
-	conn.SetNoDelay(true)
+	// conn.SetNoDelay(true)
 	// conn.SetReadBuffer(128)
 }

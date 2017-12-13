@@ -2,16 +2,13 @@ package server
 
 import (
 	"errors"
-	"fmt"
 	"net"
 	"os"
 	"runtime"
-	"time"
 
 	"github.com/apex/log"
 	"github.com/apex/log/handlers/cli"
 	"github.com/google/uuid"
-	"github.com/ultrattp/ultrattp/util"
 )
 
 var LoggingLevel = log.DebugLevel
@@ -27,24 +24,7 @@ var globalLog = &log.Logger{
 var ErrInvalidHandler = errors.New("invalid handler")
 var ErrInvalidListener = errors.New("invalid listener")
 
-var respNoContent = "HTTP/1.1 200 OK\r\n" +
-	"Content-Type: text/plain;charset=utf8\r\n" +
-	"Content-Language: en-US\r\n" +
-	"Server: ultrattp/1.0\r\n" +
-	"Date: %s\r\n" +
-	"Content-Length: 2\r\n" +
-	"Connection: closed\r\n" +
-	"Last-Modified: " + time.Unix(0, 0).In(time.UTC).Format(time.RFC1123) + "\r\n" +
-	"\r\n" +
-	"Hi\n" +
-	"\r\n"
-
 var defaultServer = &Server{}
-
-func getRespNoContent() []byte {
-	now := time.Now().In(time.UTC).Format(time.RFC1123)
-	return util.StringToBytes(fmt.Sprintf(respNoContent, now))
-}
 
 func Serve(ln *net.TCPListener, h func(*RequestCtx)) error {
 	if ln == nil {
@@ -53,15 +33,16 @@ func Serve(ln *net.TCPListener, h func(*RequestCtx)) error {
 	if h == nil {
 		return ErrInvalidHandler
 	}
-	for i := 0; i < runtime.NumCPU(); i++ {
+	for i := 0; i < runtime.NumCPU()*2; i++ {
 		aID := uuid.New().String()
 		a := &Acceptor{
 			id:  aID,
 			s:   defaultServer,
-			log: nil, /* (&log.Logger{
-				Level:   LoggingLevel,
-				Handler: logHandler,
-			}).WithField("acceptorID", aID),*/
+			log: nil,
+			// log: (&log.Logger{
+			// 	Level:   LoggingLevel,
+			// 	Handler: logHandler,
+			// }).WithField("acceptorID", aID),
 			handler: h,
 		}
 		go a.RunTCP(ln)

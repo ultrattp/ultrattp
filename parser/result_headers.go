@@ -65,7 +65,7 @@ func (r *Result) ParseHeader(name string) ([]byte, bool) {
 }
 
 func (r *Result) Proto() []byte {
-	if r.isBroken == true {
+	if r.isBroken {
 		return nil
 	}
 	return r.proto
