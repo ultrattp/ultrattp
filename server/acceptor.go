@@ -4,6 +4,7 @@ import (
 	"io"
 	"net"
 	"strings"
+	"time"
 
 	"github.com/gramework/runtimer"
 	"github.com/kirillDanshin/bufioReaderPool"
@@ -19,12 +20,18 @@ const (
 
 func (a *Acceptor) RunTCP(ln *net.TCPListener) {
 	for {
-		a.log.Debug("accepting connection")
+		if a.log != nil {
+			a.log.Debug("accepting connection")
+		}
 		conn, err := ln.AcceptTCP()
 		if err != nil {
-			a.log.Errorf("can't accept connection to %q: %s", conn.RemoteAddr(), err)
+			if a.log != nil {
+				a.log.Errorf("can't accept connection to %q: %s", conn.RemoteAddr(), err)
+			}
 			continue
 		}
+		conn.SetKeepAlive(true)
+		conn.SetKeepAlivePeriod(10 * time.Minute)
 		go a.process(conn)
 	}
 }
@@ -54,7 +61,9 @@ func (a *Acceptor) process(rawConn *net.TCPConn) {
 		if err != nil || (b.Len() != 0 && connReader.Buffered() == 0) {
 			b.Set(b.B[:currentPos])
 			if err != nil && err != io.EOF {
-				a.log.Errorf("error while reading from connection: %s", err)
+				if a.log != nil {
+					a.log.Errorf("error while reading from connection: %s", err)
+				}
 			}
 			break
 		}
@@ -80,7 +89,9 @@ func (a *Acceptor) process(rawConn *net.TCPConn) {
 		shouldCloseConn bool
 	)
 	for i, rawReq = range pipelineReq {
-		a.log.Debugf("processing %d", i)
+		if a.log != nil {
+			a.log.Debugf("processing %d", i)
+		}
 		if rawReq.Type() != parser.HTTPTypeRequest || rawReq.IsBroken() {
 			continue
 		}
@@ -101,9 +112,13 @@ func (a *Acceptor) process(rawConn *net.TCPConn) {
 
 	// time.Sleep(10 * time.Millisecond)
 	// n, err := conn.Write(getRespNoContent())
-	a.log.Debugf("written %d bytes i=%d", n, i)
+	if a.log != nil {
+		a.log.Debugf("written %d bytes i=%d", n, i)
+	}
 	if err != nil {
-		a.log.Errorf("error while writing to connection n=[%d]: %s", n, err)
+		if a.log != nil {
+			a.log.Errorf("error while writing to connection n=[%d]: %s", n, err)
+		}
 	}
 	if (i == 0 && shouldCloseConn) ||
 		strings.Compare(strings.ToUpper(util.BytesToString(rawReq.Proto())), http11) != 0 {
@@ -111,7 +126,9 @@ func (a *Acceptor) process(rawConn *net.TCPConn) {
 		// respBuf.WriteByte(byte(0x0))
 		err = conn.Close()
 		if err != nil {
-			a.log.Errorf("error while closing connection n=[%d]: %s", n, err)
+			if a.log != nil {
+				a.log.Errorf("error while closing connection n=[%d]: %s", n, err)
+			}
 		}
 	}
 }

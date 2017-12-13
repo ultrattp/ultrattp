@@ -56,12 +56,12 @@ func Serve(ln *net.TCPListener, h func(*RequestCtx)) error {
 	for i := 0; i < runtime.NumCPU(); i++ {
 		aID := uuid.New().String()
 		a := &Acceptor{
-			id: aID,
-			s:  defaultServer,
-			log: (&log.Logger{
+			id:  aID,
+			s:   defaultServer,
+			log: nil, /* (&log.Logger{
 				Level:   LoggingLevel,
 				Handler: logHandler,
-			}).WithField("acceptorID", aID),
+			}).WithField("acceptorID", aID),*/
 			handler: h,
 		}
 		go a.RunTCP(ln)
