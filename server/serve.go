@@ -56,7 +56,10 @@ func ListenAndServe(addr string, h func(*RequestCtx)) error {
 	// ln, err := net.Listen("tcp4", addr)
 	ln, err := reuseport.Listen("tcp4", addr)
 	if err != nil {
-		return err
+		ln, err = net.Listen("tcp4", addr)
+		if err != nil {
+			return err
+		}
 	}
 
 	return Serve(ln.(*net.TCPListener), h)
