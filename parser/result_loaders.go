@@ -10,6 +10,7 @@ func (r *Result) loadHeaders() {
 		return
 	}
 
+	r.isBroken = true
 	r.httpType = HTTPTypeUnknown
 }
 

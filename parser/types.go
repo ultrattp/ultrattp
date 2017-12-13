@@ -4,11 +4,12 @@ import "sync"
 
 // HTTPType is a type that used to store http body type
 // which can be request or response. can be empty if unknown state occurred
-type HTTPType string
+type HTTPType uint
 
 // Result of the parsing
 type Result struct {
 	body          []byte
+	bodyLen       int
 	rawHeadersEnd int
 	preambulaEnd  int
 
@@ -18,9 +19,11 @@ type Result struct {
 	hasBody          bool
 	allHeadersParsed bool
 	isBroken         bool
+	firstLineParsed  bool
+	isLoaded         bool
 
 	// remove padding if needed
-	padding [5]bool
+	padding [3]bool
 
 	lastParseHeadersState int
 	parsedHeaders         map[string][]byte

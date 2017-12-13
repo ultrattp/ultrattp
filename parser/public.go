@@ -1,16 +1,28 @@
 package parser
 
-import "sync"
+import (
+	"sync"
+)
+
+func (r *Result) reset() {
+	*r = Result{
+		mu: &sync.RWMutex{},
+	}
+}
 
 // Parse the given body
 func Parse(body []byte) *Result {
-	res := &Result{
-		body: body,
-		mu:   &sync.RWMutex{},
+	r := &Result{
+		body:    body,
+		bodyLen: len(body),
+		mu:      &sync.RWMutex{},
 	}
 
-	res.loadHeaders()
-	res.loadBody()
+	r.loadHeaders()
+	r.loadBody()
 
-	return res
+	r.readFirstLine()
+	r.isLoaded = true
+
+	return r
 }

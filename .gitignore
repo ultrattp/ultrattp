@@ -1,3 +1,7 @@
 *.test
 testserver/testserver
 
+*.out
+mem.png
+cpu.png
+

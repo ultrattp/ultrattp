@@ -50,7 +50,7 @@ func TestHeaders(t *testing.T) {
 		}
 		if !bytes.Equal(value, []byte(_case.Name)) {
 			t.Fatalf(
-				"Name header was found but got %q instead of expected %q in case %d",
+				"Name header was found but got %q instead of expected %q in case #%d",
 				string(value),
 				_case.Name,
 				id,
@@ -66,13 +66,14 @@ func TestHeaders(t *testing.T) {
 			}
 			if !bytes.Equal(value, []byte("trolohost")) {
 				t.Fatalf(
-					"Host header was found but got %q instead of expected %q in case %d",
+					"Host header was found but got %q instead of expected %q in case #%d",
 					string(value),
 					_case.Name,
 					id,
 				)
 			}
 		}
+
 	}
 
 }
@@ -88,12 +89,6 @@ func BenchmarkBasicParser(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		result := Parse(benchCase.Body)
-
-		if benchCase.GuessIsResponse && result.Type() != HTTPTypeResponse {
-			b.Fatalf(
-				"invalid type: got %q but response guessed, test id #0",
-				result.Type(),
-			)
-		}
+		_ = result
 	}
 }
